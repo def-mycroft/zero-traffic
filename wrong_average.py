@@ -15,7 +15,7 @@ HELP_PARAGRAPHS = {
     'collect': {
         'main':'collect data',
         'test':'test 1 24Q17 ',
-        'second-thing':'docs for second thing',
+        'print-latest':'show timestamp of latest file',
     },
     'level2': {
         'main':'level 2',
@@ -33,9 +33,9 @@ def main():
     parser_corpus = subparsers.add_parser('collect', help=h['main'])
     parser_corpus.add_argument('--test', '-t', required=False,
                                action='store_true', help=h['test'])
-    parser_corpus.add_argument('--second-thing', '-s', required=False,
+    parser_corpus.add_argument('--print-latest', '-l', required=False,
                                default=False, action='store_true',
-                               help=h['second-thing'])
+                               help=h['print-latest'])
 
     h = HELP_PARAGRAPHS['level2']
     parser_summ = subparsers.add_parser('level2', help=h['main'])
@@ -51,8 +51,9 @@ def main():
         if args.test:
             from zero_wrong_average.main import get
             get()
-        elif args.second_thing:
-            print('here is second thing')
+        elif args.print_latest:
+            from zero_wrong_average.main import latest
+            latest()
 
     elif args.command == 'level2':
         if args.third_thing:

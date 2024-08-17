@@ -20,3 +20,12 @@ def get():
     print(f"wrote '{fp}'")
 
 
+def latest():
+    files = sorted(glob(join(PATH_OUTPUT, '*json')))
+    print(files[-1])
+    d = pd.Timestamp(basename(files[-1]), unit='s', tz='UTC')
+    print(d.tz_convert('America/Denver'))
+
+
+
+
