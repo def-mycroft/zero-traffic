@@ -12,9 +12,9 @@ import numpy as np
 
 HELP_PARAGRAPHS = {
     'main':'an example cli tool',
-    'level1': {
-        'main':'main level',
-        'first-thing':'docs for first thing',
+    'collect': {
+        'main':'collect data',
+        'test':'test 1 24Q17 ',
         'second-thing':'docs for second thing',
     },
     'level2': {
@@ -25,29 +25,14 @@ HELP_PARAGRAPHS = {
 }
 
 
-def check_path(fp):
-    # Check if the path is absolute or relative
-    if os.path.isabs(args.input_file):
-        file_path = args.input_file
-    else:
-        file_path = os.path.join(os.getcwd(), args.input_file)
-
-    # Verify if the file exists
-    if not os.path.exists(file_path):
-        print(f"Error: File '{file_path}' not found.")
-
-    return file_path
-
-
 def main():
     parser = argparse.ArgumentParser(description=HELP_PARAGRAPHS['main'])
     subparsers = parser.add_subparsers(dest='command', help='')
 
-    h = HELP_PARAGRAPHS['level1']
-    parser_corpus = subparsers.add_parser('level1', help=h['main'])
-    parser_corpus.add_argument('--first-thing', '-f', required=False,
-                               default='', action='store',
-                               help=h['first-thing'])
+    h = HELP_PARAGRAPHS['collect']
+    parser_corpus = subparsers.add_parser('collect', help=h['main'])
+    parser_corpus.add_argument('--test', '-t', required=False,
+                               action='store_true', help=h['test'])
     parser_corpus.add_argument('--second-thing', '-s', required=False,
                                default=False, action='store_true',
                                help=h['second-thing'])
@@ -62,9 +47,10 @@ def main():
                              help=h['fourth-thing'])
     args = parser.parse_args()
 
-    if args.command == 'level1':
-        if args.first_thing:
-            print('here is first thing')
+    if args.command == 'collect':
+        if args.test:
+            from zero_wrong_average.main import get
+            get()
         elif args.second_thing:
             print('here is second thing')
 
