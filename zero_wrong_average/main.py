@@ -13,23 +13,16 @@ assert exists(PATH_OUTPUT)
 
 def get():
     d = pd.Timestamp.utcnow()
-    fn = f"{d.timestamp()}-{IDENTIFIER}.json"
+    fn = f"{d.timestamp()}-{IDENTIFIER}.xml"
     fp = join(PATH_OUTPUT, fn)
     ex(f"{CURL} > '{fp}'")
     assert exists(fp), fp
     print(f"wrote '{fp}'")
 
 
-def latest():
-    files = sorted(glob(join(PATH_OUTPUT, '*json')))
-    print(files[-1])
-    d = pd.Timestamp(basename(files[-1]), unit='s', tz='UTC')
-    print(d.tz_convert('America/Denver'))
-
-
 def parse_archive(fp_archive):
     """Load all json files in fp_archive"""
-    files = glob(join(fp_archive, '*json'))
+    files = glob(join(fp_archive, '*xml'))
     data = dict()
 
     for fp in files:
@@ -41,5 +34,22 @@ def parse_archive(fp_archive):
                                 .isoformat())
             data[k] = d
     return data
+
+
+def latest():
+    files = sorted(glob(join(PATH_OUTPUT, '*xml')))
+    print(files[-1])
+    d = pd.Timestamp(basename(files[-1]), unit='s', tz='UTC')
+    print(d.tz_convert('America/Denver'))
+
+    x = basename(files[-1]).split('-')[0]
+    x = float(x)
+    print(x)
+
+    if 0 <= x <= pd.Timestamp.max.timestamp():
+        d = pd.Timestamp(x, unit='s', tz='UTC')
+        print(d.tz_convert('America/Denver'))
+    else:
+        print("Invalid timestamp:", x)
 
 
