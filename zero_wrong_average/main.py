@@ -1,6 +1,6 @@
 
-
 from .imports import * 
+import xmltodict
 
 CURL = "curl 'https:/api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/xml?key=8JrTFy5cUhH7Lnklp5ZX6G7uuJLOjaq8&point=39.806944,-104.983333'"
 
@@ -27,5 +27,19 @@ def latest():
     print(d.tz_convert('America/Denver'))
 
 
+def parse_archive(fp_archive):
+    """Load all json files in fp_archive"""
+    files = glob(join(fp_archive, '*json'))
+    data = dict()
+
+    for fp in files:
+        k = basename(fp)
+        with open(fp, 'r') as f:
+            d = xmltodict.parse(f.read())
+            d['timestamp'] = (pd.Timestamp(float(k.split('-')[0]), 
+                                           unit='s', tz='UTC')
+                                .isoformat())
+            data[k] = d
+    return data
 
 
