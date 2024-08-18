@@ -39,7 +39,7 @@ def parse_archive(fp_archive):
 def latest():
     files = sorted(glob(join(PATH_OUTPUT, '*xml')))
     print(files[-1])
-    d = pd.Timestamp(basename(files[-1]), unit='s', tz='UTC')
+    d = pd.Timestamp(float(basename(files[-1]).split('-')[0]), unit='s', tz='UTC')
     print(d.tz_convert('America/Denver'))
 
     x = basename(files[-1]).split('-')[0]
