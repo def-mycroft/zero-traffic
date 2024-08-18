@@ -49,8 +49,8 @@ def main():
 
     if args.command == 'collect':
         if args.test:
-            from zero_wrong_average.main import get
-            get()
+            from zero_wrong_average.main import get_all
+            get_all()
         elif args.print_latest:
             from zero_wrong_average.main import latest
             latest()

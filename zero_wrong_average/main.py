@@ -2,20 +2,36 @@
 from .imports import * 
 import xmltodict
 
-CURL = "curl 'https:/api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/xml?key=8JrTFy5cUhH7Lnklp5ZX6G7uuJLOjaq8&point=39.806944,-104.983333'"
+# https://developer.tomtom.com/traffic-api/documentation/traffic-flow/flow-segment-data
 
-IDENTIFIER = 'denver-I25@I76'
-PATH_OUTPUT = f'/l/gds/wrong-average-data/{IDENTIFIER}/'
-if not exists(PATH_OUTPUT):
-    ex(f"mkdir -p '{PATH_OUTPUT}'")
-assert exists(PATH_OUTPUT)
+API_KEY = '8JrTFy5cUhH7Lnklp5ZX6G7uuJLOjaq8'
+ID_LATLON = [
+    ('denver-I25@I76', 39.806944,-104.983333),
+    ('denver-I25@I70', 39.77019010470875, -104.99145451525855),
+    ('denver-I25@104th', 39.880795560153004, -104.9874785233745),
+]
 
 
-def get():
+def get_all():
+    for identifier, lat, lon in ID_LATLON:
+        get(identifier, lat, lon)
+
+
+def get(identifier, lat, lon):
+
+    #identifier = 'denver-I25@I76'
+    path_output = f'/l/gds/wrong-average-data/{identifier}/'
+    if not exists(path_output):
+        ex(f"mkdir -p '{path_output}'")
+    assert exists(path_output)
+
     d = pd.Timestamp.utcnow()
-    fn = f"{d.timestamp()}-{IDENTIFIER}.xml"
-    fp = join(PATH_OUTPUT, fn)
-    ex(f"{CURL} > '{fp}'")
+    fn = f"{d.timestamp()}-{identifier}.xml"
+    fp = join(path_output, fn)
+
+    curl = (f"curl 'https:/api.tomtom.com/traffic/services/4/flowSegmentData"
+            f"/absolute/10/xml?key={API_KEY}&point={lat},{lon}'")
+    ex(f"{curl} > '{fp}'")
     assert exists(fp), fp
     print(f"wrote '{fp}'")
 
@@ -36,8 +52,9 @@ def parse_archive(fp_archive):
     return data
 
 
-def latest():
-    files = sorted(glob(join(PATH_OUTPUT, '*xml')))
+def latest(identifier=ID_LATLON[0][0]):
+    path_output = f'/l/gds/wrong-average-data/{identifier}/'
+    files = sorted(glob(join(path_output, '*xml')))
     print(files[-1])
     d = pd.Timestamp(float(basename(files[-1]).split('-')[0]), unit='s', tz='UTC')
     print(d.tz_convert('America/Denver'))
