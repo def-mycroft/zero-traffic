@@ -15,12 +15,11 @@ HELP_PARAGRAPHS = {
     'collect': {
         'main':'collect data',
         'collect-all':'execute all queued API calls, based on config.',
-        'print-latest':'show timestamp of latest file',
     },
-    'level2': {
-        'main':'level 2',
-        'third-thing':'docs for third thing',
-        'fourth-thing':'docs for fourth thing',
+    'inspect': {
+        'main':'inspect data',
+        'print-latest':'show timestamp of latest file',
+        'retrieve-kml':'dump kml path files for all collected places',
     },
 }
 
@@ -30,36 +29,33 @@ def main():
     subparsers = parser.add_subparsers(dest='command', help='')
 
     h = HELP_PARAGRAPHS['collect']
-    parser_corpus = subparsers.add_parser('collect', help=h['main'])
-    parser_corpus.add_argument('--collect-all', '-a', required=False,
-                               action='store_true', help=h['collect-all'])
-    parser_corpus.add_argument('--print-latest', '-l', required=False,
-                               default=False, action='store_true',
-                               help=h['print-latest'])
+    parser_collect = subparsers.add_parser('collect', help=h['main'])
+    parser_collect.add_argument('--collect-all', '-a', required=False,
+                                action='store_true', help=h['collect-all'])
 
-    h = HELP_PARAGRAPHS['level2']
-    parser_summ = subparsers.add_parser('level2', help=h['main'])
-    parser_summ.add_argument('--third-thing', '-t', required=False,
-                             default=False, action='store_true',
-                             help=h['third-thing'])
-    parser_summ.add_argument('--fourth-thing', '-f', required=False,
-                             default=False, action='store_true',
-                             help=h['fourth-thing'])
+    h = HELP_PARAGRAPHS['inspect']
+    parser_inspect = subparsers.add_parser('inspect', help=h['main'])
+    parser_inspect.add_argument('--print-latest', '-l', required=False,
+                                default=False, action='store_true',
+                                help=h['print-latest'])
+    parser_inspect.add_argument('--retrieve-kml', required=False, default=False,
+                                action='store_true', help=h['retrieve-kml'])
+    args = parser.parse_args()
     args = parser.parse_args()
 
     if args.command == 'collect':
         if args.collect_all:
             from zero_wrong_average.main import get_all
             get_all()
-        elif args.print_latest:
+
+    elif args.command == 'inspect':
+        if args.print_latest:
             from zero_wrong_average.main import latest
             latest()
+        if args.retrieve_kml:
+            from zero_wrong_average import convert_to_kml as kml
+            kml.write_kml_files()
 
-    elif args.command == 'level2':
-        if args.third_thing:
-            print('3rd')
-        elif args.fourth_thing:
-            print('4th')
 
 if __name__ == '__main__':
     main()
