@@ -14,7 +14,7 @@ HELP_PARAGRAPHS = {
     'main':'an example cli tool',
     'collect': {
         'main':'collect data',
-        'test':'test 1 24Q17 ',
+        'collect-all':'execute all queued API calls, based on config.',
         'print-latest':'show timestamp of latest file',
     },
     'level2': {
@@ -31,8 +31,8 @@ def main():
 
     h = HELP_PARAGRAPHS['collect']
     parser_corpus = subparsers.add_parser('collect', help=h['main'])
-    parser_corpus.add_argument('--test', '-t', required=False,
-                               action='store_true', help=h['test'])
+    parser_corpus.add_argument('--collect-all', '-a', required=False,
+                               action='store_true', help=h['collect-all'])
     parser_corpus.add_argument('--print-latest', '-l', required=False,
                                default=False, action='store_true',
                                help=h['print-latest'])
@@ -48,7 +48,7 @@ def main():
     args = parser.parse_args()
 
     if args.command == 'collect':
-        if args.test:
+        if args.collect_all:
             from zero_wrong_average.main import get_all
             get_all()
         elif args.print_latest:

@@ -1,5 +1,6 @@
 
 import os
+import yaml
 from os.path import exists, dirname, basename, join, expanduser
 from os import system as ex
 from glob import glob

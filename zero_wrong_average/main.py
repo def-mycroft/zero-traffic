@@ -1,15 +1,15 @@
 
 from .imports import * 
+from .config import load_config
 import xmltodict
 
 # https://developer.tomtom.com/traffic-api/documentation/traffic-flow/flow-segment-data
 
-API_KEY = '8JrTFy5cUhH7Lnklp5ZX6G7uuJLOjaq8'
-ID_LATLON = [
-    ('denver-I25@I76', 39.806944,-104.983333),
-    ('denver-I25@I70', 39.77019010470875, -104.99145451525855),
-    ('denver-I25@104th', 39.880795560153004, -104.9874785233745),
-]
+CONFIG = load_config()
+# TODO - this needs to go to config, api key and idlatlon
+API_KEY = CONFIG['api_key']
+ID_LATLON = CONFIG['id_latlon']
+PATH_DATA_ARCHIVE = CONFIG['path_data_archive']
 
 
 def get_all():
@@ -19,8 +19,7 @@ def get_all():
 
 def get(identifier, lat, lon):
 
-    #identifier = 'denver-I25@I76'
-    path_output = f'/l/gds/wrong-average-data/{identifier}/'
+    path_output = join(PATH_DATA_ARCHIVE, identifier)
     if not exists(path_output):
         ex(f"mkdir -p '{path_output}'")
     assert exists(path_output)
@@ -53,7 +52,7 @@ def parse_archive(fp_archive):
 
 
 def latest(identifier=ID_LATLON[0][0]):
-    path_output = f'/l/gds/wrong-average-data/{identifier}/'
+    path_output = join(PATH_DATA_ARCHIVE, identifier)
     files = sorted(glob(join(path_output, '*xml')))
     print(files[-1])
     d = pd.Timestamp(float(basename(files[-1]).split('-')[0]), unit='s', tz='UTC')
