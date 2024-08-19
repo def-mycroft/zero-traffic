@@ -13,7 +13,12 @@ PATH_DATA = '/l/gds/wrong-average-data/'
 def load_data_archive():
     """Load data archive"""
     fp = join(PATH_DATA, 'data-archive.csv.gz')
-    return pd.read_csv(fp, compression='gzip')
+    df = pd.read_csv(fp, compression='gzip')
+
+    df['datetime'] = pd.to_datetime(df['datetime'])
+    df['speed_percent'] = df['currentSpeed'] / df['freeFlowSpeed']
+
+    return df
 
 
 def archive_data(df):
