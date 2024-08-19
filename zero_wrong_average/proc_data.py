@@ -10,6 +10,19 @@ PATH_DATA = '/l/gds/wrong-average-data/'
 # should be able to use this. 
 
 
+def load_data_archive():
+    """Load data archive"""
+    fp = join(PATH_DATA, 'data-archive.csv.gz')
+    return pd.read_csv(fp, compression='gzip')
+
+
+def archive_data(df):
+    """Archive processed xml data"""
+    fp = join(PATH_DATA, 'data-archive.csv.gz')
+    df.to_csv(fp, index=False, compression='gzip')
+    return fp
+
+
 def load_xml():
     """Retrieve xml files from project directory"""
     files = glob(join(PATH_DATA, '*', '*xml'))
@@ -26,7 +39,7 @@ def load_xml():
     return xml
 
 
-def collect():
+def collect(verbose=True):
     """Parse project xml files, return dataframe 
 
     Parse XML files from a specified directory structure and return a 
@@ -51,11 +64,18 @@ def collect():
     Exception
         If a non-empty file fails to parse, an exception is raised.
     """
+    if verbose:
+        print('loading xml data..')
     xml = load_xml()
+    if verbose:
+        print('done. processing xml data...')
 
     # extract selected data from dataframe 
     data = list()
+    i = 0
     for fp in xml.keys():
+        if verbose:
+            print(f"handling '{fp}'...")
         row = {
             'path':fp,
             'timestamp_float':float(basename(fp).split('-')[0]),
@@ -71,9 +91,19 @@ def collect():
             row[col] = xml[fp]['flowSegmentData'][col] 
 
         data.append(row)
+        i += 1
 
+    if verbose:
+        print(f"processed {i} xml files, creating dataframe")
     df = (pd.DataFrame(data).sort_values(by=['place_description', 'datetime'])
             .reset_index(drop=True))
     df['roadClosure'] = (df['roadClosure'].map({'true':True, 'false':False}))
+    if verbose:
+        print('done, writing out dataframe...')
+
+    # write dataframe out to data folder 
+    fp = archive_data(df)
+    if verbose:
+        print(f"done, wrote '{fp}'")
 
     return df, xml

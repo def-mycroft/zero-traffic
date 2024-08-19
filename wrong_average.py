@@ -20,6 +20,7 @@ HELP_PARAGRAPHS = {
         'main':'inspect data',
         'print-latest':'show timestamp of latest file',
         'retrieve-kml':'dump kml path files for all collected places',
+        'update-data-archive':'process all xml files and write csv file.',
     },
 }
 
@@ -40,7 +41,9 @@ def main():
                                 help=h['print-latest'])
     parser_inspect.add_argument('--retrieve-kml', required=False, default=False,
                                 action='store_true', help=h['retrieve-kml'])
-    args = parser.parse_args()
+    parser_inspect.add_argument('--update-data-archive', required=False,
+                                default=False, action='store_true',
+                                help=h['update-data-archive'])
     args = parser.parse_args()
 
     if args.command == 'collect':
@@ -55,6 +58,9 @@ def main():
         if args.retrieve_kml:
             from zero_wrong_average import convert_to_kml as kml
             kml.write_kml_files()
+        if args.update_data_archive:
+            from zero_wrong_average.proc_data import collect
+            collect()
 
 
 if __name__ == '__main__':
