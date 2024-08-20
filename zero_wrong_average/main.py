@@ -6,19 +6,41 @@ import xmltodict
 # https://developer.tomtom.com/traffic-api/documentation/traffic-flow/flow-segment-data
 
 CONFIG = load_config()
-# TODO - this needs to go to config, api key and idlatlon
 API_KEY = CONFIG['api_key']
 ID_LATLON = CONFIG['id_latlon']
 PATH_DATA_ARCHIVE = CONFIG['path_data_archive']
 
 
 def get_all():
+    """Apply get function to all places in config"""
     for identifier, lat, lon in ID_LATLON:
         get(identifier, lat, lon)
 
 
 def get(identifier, lat, lon):
+    """Retrieve traffic data for a given place
 
+    Retrieve and save traffic data based on the identifier, latitude, 
+    and longitude.
+
+    This function fetches traffic data from the TomTom API using the 
+    provided coordinates, saves the data as an XML file in a specified 
+    directory, and ensures the file is successfully written.
+
+    Parameters
+    ----------
+    identifier : str
+        A unique identifier used to name the output directory and file.
+    lat : str
+        The latitude coordinate for the API request.
+    lon : str
+        The longitude coordinate for the API request.
+
+    Returns
+    -------
+    None
+
+    """
     path_output = join(PATH_DATA_ARCHIVE, identifier)
     if not exists(path_output):
         ex(f"mkdir -p '{path_output}'")
@@ -52,6 +74,7 @@ def parse_archive(fp_archive):
 
 
 def latest(identifier=ID_LATLON[0][0]):
+    """Identify and print latest value for a given place"""
     path_output = join(PATH_DATA_ARCHIVE, identifier)
     files = sorted(glob(join(path_output, '*xml')))
     print(files[-1])
@@ -67,5 +90,3 @@ def latest(identifier=ID_LATLON[0][0]):
         print(d.tz_convert('America/Denver'))
     else:
         print("Invalid timestamp:", x)
-
-

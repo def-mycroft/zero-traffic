@@ -2,16 +2,30 @@
 import xmltodict
 from warnings import warn
 from .imports import * 
+from .config import load_config
 
-# TODO - this should be in a config 
-PATH_DATA = '/l/gds/wrong-average-data/'
-
-# TODO - create a config that allows for tracking data, someon else 
-# should be able to use this. 
+CONFIG = load_config()
+PATH_DATA = config['path_data_archive']
 
 
 def load_data_archive():
-    """Load data archive"""
+    """Load the archived CSV file and apply basic manipulations
+
+    This function reads a gzipped CSV file from the data archive, 
+    converts the 'datetime' column to a datetime object, calculates the 
+    speed percentage, and extracts the hour and day from the datetime.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    pandas.DataFrame
+        The processed DataFrame with additional columns for
+        'speed_percent', 'hour', and 'day'.
+
+    """
     fp = join(PATH_DATA, 'data-archive.csv.gz')
     df = pd.read_csv(fp, compression='gzip')
 
@@ -31,7 +45,11 @@ def archive_data(df):
 
 
 def load_xml():
-    """Retrieve xml files from project directory"""
+    """Retrieve all xml files from project directory
+
+    Returns a dict mapping filepath to dict version of xml data. 
+
+    """
     files = glob(join(PATH_DATA, '*', '*xml'))
     xml = dict()
     for fp in files:
