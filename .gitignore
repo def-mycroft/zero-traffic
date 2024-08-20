@@ -1,5 +1,17 @@
 cli.py
 *.ipynb_checkpoints
 config.yaml
+*.pyc
 __pycache__/
 *egg-info*
+
+# Ignore docs build directories
+docs/build/
+docs/source/_build/
+docs/source/_static/
+docs/source/_templates/
+
+# Ignore Sphinx autosummary and doctrees
+docs/source/_autosummary/
+docs/source/_doctrees/
+

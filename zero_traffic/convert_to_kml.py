@@ -50,6 +50,9 @@ def write_kml(coordinates, fp_output='/l/tmp/import.kml'):
             {'latitude': '39.807891', 'longitude': '-104.983319'}
         ]
 
+    ...each of these coordinates will be a pin in the Google Earth 
+    import. 
+
     Parameters
     ----------
     coordinates : list of dict
