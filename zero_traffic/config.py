@@ -1,6 +1,6 @@
 
 from .imports import * 
-PATH_CONFIG = join(expanduser('~'), '.config', 'wrong-average.yaml')
+PATH_CONFIG = join(expanduser('~'), '.config', 'zero-traffic.yaml')
 
 CONFIG_TEMPLATE = """{'api_key': '<api key>',
 'path_data_archive': '<path to project archive>',
