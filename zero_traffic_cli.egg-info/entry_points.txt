@@ -1,0 +1,2 @@
+[console_scripts]
+zero-traffic-cli = zero_traffic_cli:main
