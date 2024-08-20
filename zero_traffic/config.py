@@ -12,6 +12,9 @@ CONFIG_TEMPLATE = """{'api_key': '<api key>',
 def write_template_config():
     """Write out a config template"""
     c = eval(CONFIG_TEMPLATE)
+    if exists(PATH_CONFIG):
+        if input(f"file '{PATH_CONFIG}' exists, are you sure? (y) > ") != 'y':
+            raise Exception('stopped by user. ')
     with open(PATH_CONFIG, 'w') as f:
         yaml.dump(c, f, default_flow_style=False)
     print(f"wrote config template to '{PATH_CONFIG}'")

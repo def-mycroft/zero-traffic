@@ -21,6 +21,7 @@ HELP_PARAGRAPHS = {
         'print-latest':'show timestamp of latest file',
         'retrieve-kml':'dump kml path files for all collected places',
         'update-data-archive':'process all xml files and write csv file.',
+        'generate-config':'generate a configuration template which can be edited. ',
     },
 }
 
@@ -44,6 +45,9 @@ def main():
     parser_inspect.add_argument('--update-data-archive', required=False,
                                 default=False, action='store_true',
                                 help=h['update-data-archive'])
+    parser_inspect.add_argument('--generate-config', required=False,
+                                default=False, action='store_true',
+                                help=h['generate-config'])
     args = parser.parse_args()
 
     if args.command == 'collect':
@@ -55,12 +59,15 @@ def main():
         if args.print_latest:
             from zero_traffic.main import latest
             latest()
-        if args.retrieve_kml:
+        elif args.retrieve_kml:
             from zero_traffic import convert_to_kml as kml
             kml.write_kml_files()
-        if args.update_data_archive:
+        elif args.update_data_archive:
             from zero_traffic.proc_data import collect
             collect()
+        elif args.generate_config:
+            from zero_traffic.config import write_template_config
+            write_template_config()
 
 if __name__ == '__main__':
     main()
