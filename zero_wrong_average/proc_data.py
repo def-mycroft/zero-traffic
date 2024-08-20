@@ -5,7 +5,7 @@ from .imports import *
 from .config import load_config
 
 CONFIG = load_config()
-PATH_DATA = config['path_data_archive']
+PATH_DATA = CONFIG['path_data_archive']
 
 
 def load_data_archive():
