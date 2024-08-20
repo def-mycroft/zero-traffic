@@ -17,6 +17,8 @@ def load_data_archive():
 
     df['datetime'] = pd.to_datetime(df['datetime'])
     df['speed_percent'] = df['currentSpeed'] / df['freeFlowSpeed']
+    df['hour'] = df['datetime'].dt.hour
+    df['day'] = df['datetime'].dt.floor('D')
 
     return df
 
