@@ -28,3 +28,4 @@ Use `zero-traffic-cli inspect --generate-config` to generate a configuration tem
 
 Each entry in `id_latlon` is a list with an arbitrary descriptor, a latitude and a longitude. These should be coordinates that are precisely located on the road where data collection is desirable. 
 
+
