@@ -48,20 +48,19 @@ def main():
 
     if args.command == 'collect':
         if args.collect_all:
-            from zero_wrong_average.main import get_all
+            from zero_traffic.main import get_all
             get_all()
 
     elif args.command == 'inspect':
         if args.print_latest:
-            from zero_wrong_average.main import latest
+            from zero_traffic.main import latest
             latest()
         if args.retrieve_kml:
-            from zero_wrong_average import convert_to_kml as kml
+            from zero_traffic import convert_to_kml as kml
             kml.write_kml_files()
         if args.update_data_archive:
-            from zero_wrong_average.proc_data import collect
+            from zero_traffic.proc_data import collect
             collect()
-
 
 if __name__ == '__main__':
     main()

@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 # change the name here and rename cli module
-name = 'wrong-average'
+name = 'zero-traffic-cli'
 n = name.replace('-', '_')
 
 setup(
