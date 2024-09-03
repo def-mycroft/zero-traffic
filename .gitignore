@@ -1,5 +1,6 @@
 cli.py
 *.ipynb_checkpoints
+notebooks
 config.yaml
 *.pyc
 __pycache__/
